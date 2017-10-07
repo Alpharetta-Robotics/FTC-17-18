@@ -1,5 +1,7 @@
 ## TeamCode Module
 
+DO NOT DELETE THIS FILE
+
 Welcome!
 
 This module, TeamCode, is the place where you will write/paste the code for your team's
