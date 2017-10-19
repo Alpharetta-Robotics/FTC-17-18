@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.blackteamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,6 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  */
 
 @TeleOp(name = "Mecanum Test", group = "test")
+@Disabled
 public class MecanumTest extends OpMode {
 
 	private DcMotor fl,fr,bl,br;
