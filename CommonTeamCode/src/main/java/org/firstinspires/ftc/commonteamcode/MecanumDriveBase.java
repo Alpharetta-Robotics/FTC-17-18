@@ -31,9 +31,9 @@ public class MecanumDriveBase {
 	}
 
 	public void setSpeedsFromGamepad(Gamepad gamepad) {
-		double sideways	= gamepad.left_stick_x;
-		double forward	= gamepad.left_stick_y;
-		double rotate	= -gamepad.right_stick_x;
+		double sideways	= 0.7*gamepad.left_stick_x;
+		double forward	= 0.7*gamepad.left_stick_y;
+		double rotate	= -0.7*gamepad.right_stick_x;
 
 		double speed = Math.sqrt(Math.pow(sideways,2)+Math.pow(forward,2));
 		double direction = Math.atan2(-sideways, forward);
