@@ -14,30 +14,37 @@ import static org.firstinspires.ftc.teamcode.HardwarePushBot.colorSensorArmRotat
 
 /**
  * Created by shrey on 2018-01-25.
+ * This program uses time as a way to figure out distance. Team Eclipse did this because the robot didn't have an drive encoders that could calculate the distance
+ * using a series of ticks. I WOULD NOT RECOMMEND ANYONE TO DO THIS UNLESS IT IS THE FINAL OPTION! The series of steps of the auton is split into steps to make it
+ * easier to read and understand what exactly the robot is doing and for how long and in what direction.
  */
 
 
 @Autonomous (name = "Blue ColorSensor Right", group = "Autonomous")
-public class BluecolorRight extends LinearOpMode{
+public class BlueColorRight extends LinearOpMode{
+
+    // Instantiate the robot in this class so that we can use it in this class.
     HardwarePushBot robot = new HardwarePushBot();
     private ElapsedTime runtime = new ElapsedTime();
 
+    // Speed constants in Auton
     static final double     FORWARD_SPEED = 0.6;
     static final double     TURN_SPEED    = 0.5;
+
+    // This variable is used to set values for red or blue. Color red is 0 and blue is 1.
     private double color;
 
+    // Main method and overrides any other program or method running.
     @Override
     public void runOpMode(){
-        /*
-         * Initialize the drive system variables.
-         * The init() method of the hardware class does all the work here
-         */
+        // Initializes the motors declared in hardwareMap or HardwareMap class.
         robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
-        //FOR COLOR SENSOR ONLY
+
+        //FOR COLOR SENSOR ONLY!! DON'T TOUCH!!!
         // hsvValues is an array that will hold the hue, saturation, and value information.
         float hsvValues[] = {0F,0F,0F};
 
@@ -63,7 +70,8 @@ public class BluecolorRight extends LinearOpMode{
         driveMethod(-FORWARD_SPEED * 0.2 , -FORWARD_SPEED * 0.2, 0.65);
 
         driveMethod(0, 0, 2.5);
-//Step 3. Drop the color sensor in between the jewels and take reading
+
+        //Step 3. Drop the color sensor in between the jewels and take reading
         colorSensorArmRotate.setPosition(0.45);
         doNothing();
         colorSensorArm.setPosition(1);
@@ -72,22 +80,24 @@ public class BluecolorRight extends LinearOpMode{
 
         doNothing();
 
-
-
         runtime.reset();
 
-        while (opModeIsActive() && (runtime.seconds() < 3.0)) {
+        // This part of the program is ran to figure out the color or the jewel
+        while (opModeIsActive() && (runtime.seconds() < 3.0))
+        {
             telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
             telemetry.update();
 
 
-            //Step 4. Read the color of jewels
-            if (colorSense.red() >= 40) {
+            // Step 4. Read the color of jewels
+            // If the value of red is read greater than that of blue, then we set the color value to 0 to symbolize red. Otherwise if the value of blue is read
+            // greater than that of red, we set the color value to 1 to symbolize blue.
+            if (colorSense.red() > colorSense.blue()) {
                 color = 0;
                 telemetry.addData(colorSense.red()+"I see red!", "RED");
                 telemetry.update();
             } else {
-                color = -1;
+                color = 1;
                 telemetry.addData("I see blue!", "BLUE");
             }
         }
@@ -225,22 +235,27 @@ public class BluecolorRight extends LinearOpMode{
             doNothing();
         }
     }
+    // This method is used for setting the motors to a specified speed and for a set amount of seconds
     public void driveMethod(double rightSpeed, double leftSpeed, double secs){
+        // The motors are being set to a speed given within the parameters
         robot.rightFrontDrive.setPower(rightSpeed);
         robot.rightBackDrive.setPower(rightSpeed);
         robot.leftFrontDrive.setPower(leftSpeed);
         robot.leftBackDrive.setPower(leftSpeed);
 
+        // Resets the runtime to 0 so that when calculating speed, the previous time is not impacting the amount of time a call should
+        // run for (double sec). If you are still confused about this ask Shreya.
         runtime.reset();
 
+        // Runs the action only if the OpMode is still running and active and if the reset runtime is less than the variable, double sec.
         while (opModeIsActive() && (runtime.seconds() < secs)) {
             telemetry.addData("Path", "Leg 1: %2.5f S Elapsed", runtime.seconds());
             telemetry.update();
         }
     }
 
+    // This method sets all motors to have a speed this is 0 and only for 0.3 seconds long.
     public void doNothing(){
         driveMethod(0, 0, 0.3);
     }
 }
-
