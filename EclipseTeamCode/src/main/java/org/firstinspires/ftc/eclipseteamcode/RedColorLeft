@@ -14,30 +14,36 @@ import static org.firstinspires.ftc.teamcode.HardwarePushBot.colorSensorArmRotat
 
 /**
  * Created by shrey on 2018-01-24.
+ * This program uses time as a way to figure out distance. Team Eclipse did this because the robot didn't have an drive encoders that could calculate the distance
+ * using a series of ticks. I WOULD NOT RECOMMEND ANYONE TO DO THIS UNLESS IT IS THE FINAL OPTION! The series of steps of the auton is split into steps to make it
+ * easier to read and understand what exactly the robot is doing and for how long and in what direction.
  */
 
 
 @Autonomous (name = "Red ColorSensor Left", group = "Autonomous")
-public class RedcolorLeft extends LinearOpMode {
+public class RedColorLeft extends LinearOpMode {
+    // Instantiate the robot in this class so that we can use it in this class.
     HardwarePushBot robot = new HardwarePushBot();
     private ElapsedTime runtime = new ElapsedTime();
 
+    // Speed constants in Auton
     static final double     FORWARD_SPEED = 0.6;
     static final double     TURN_SPEED    = 0.5;
+
+    // This variable is used to set values for red or blue. Color red is 0 and blue is 1.
     private double color;
 
+    // Main method and overrides any other program or method running.
     @Override
     public void runOpMode(){
-         /*
-         * Initialize the drive system variables.
-         * The init() method of the hardware class does all the work here
-         */
+        // Initializes the motors declared in hardwareMap or HardwareMap class.
         robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
-        //FOR COLOR SENSOR ONLY
+
+        //FOR COLOR SENSOR ONLY!! DON'T TOUCH!!!
         // hsvValues is an array that will hold the hue, saturation, and value information.
         float hsvValues[] = {0F,0F,0F};
 
@@ -63,7 +69,8 @@ public class RedcolorLeft extends LinearOpMode {
         driveMethod(-FORWARD_SPEED * 0.2 , -FORWARD_SPEED * 0.2, 0.5);
 
         driveMethod(0, 0, 2.5);
-//Step 3. Drop the color sensor in between the jewels and take reading
+
+        //Step 3. Drop the color sensor in between the jewels and take reading
         colorSensorArmRotate.setPosition(0.45);
         doNothing();
 
