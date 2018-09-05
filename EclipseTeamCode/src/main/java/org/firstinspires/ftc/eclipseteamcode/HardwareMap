@@ -19,6 +19,18 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * rightBackDrive = back right motor
  * leftBackDrive = back left motor
  *
+ * glyphLift = motor that lifts the grabbing mechanism
+ * glyphLiftRight = servo that is on the right on the top of grabbing mechanism
+ * glyphLiftLeft = servo that is on the left on the top of grabbing mechanism
+ * glyphLiftRight2 = servo that is on the right on the bottom of the grabbing mechanism
+ * glyphLiftLeft2 = servo that is on the left on the bottom of the grabbing mechanism
+ *
+ * colorSense = color sense used to sense the color of the jewel
+ * colorSensorArm = the servo used to drop the color sensor in between the 2 jewels
+ * colorSensorArmRotate = the servo used to knock off the correct colored jewel based on the color read
+ *
+ * HardwareMap = the digital place where all electronic components are put to reference when programming
+ *
  */
 
 public class HardwarePushBot{
@@ -63,10 +75,10 @@ public class HardwarePushBot{
 
         //glyphlift subsystem
         glyphLift = hwMap.dcMotor.get("gl");        //1
-        glyphLiftRight = hwMap.servo.get("glr");    //0
-        glyphLiftLeft = hwMap.servo.get("gll");     //1
-        glyphLiftRight2 = hwMap.servo.get("glr2");
-        glyphLiftLeft2 = hwMap.servo.get("gll2");
+        glyphLiftRight = hwMap.servo.get("glr");    //2
+        glyphLiftLeft = hwMap.servo.get("gll");     //3
+        glyphLiftRight2 = hwMap.servo.get("glr2");  //4
+        glyphLiftLeft2 = hwMap.servo.get("gll2");   //5
 
 
         //Claw subsytem
@@ -74,7 +86,7 @@ public class HardwarePushBot{
         //relicPosition = hwMap.dcMotor.get("rp");    //2
 
         //Color Sensor
-        colorSense = hwMap.colorSensor.get("cs");     //12 Bus0
+        colorSense = hwMap.colorSensor.get("cs");     //12 Bus3
         colorSensorArm = hwMap.servo.get("csa");      //4
         colorSensorArmRotate = hwMap.servo.get("csa1");
 
