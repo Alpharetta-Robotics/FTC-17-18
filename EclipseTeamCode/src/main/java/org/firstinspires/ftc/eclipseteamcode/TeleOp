@@ -1,100 +1,63 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-/**
- * Created by shrey on 2017-11-05.
- */
+@TeleOp(name = "Tel", group = "Sensor")
+public class TeleOpDrive extends LinearOpMode{
 
-@TeleOp(name="TeleOp", group="group")
+    HardwarePushBot robot = new HardwarePushBot();
 
-public class New_TeleOp extends LinearOpMode{
 
-    // We instantiate the motors in the HardwarePushBot class, however we need to instantiate the robot in this class in order to use like an object.
-    // Robot and Timer
-    public static HardwarePushBot robot = new HardwarePushBot();
-    public static ElapsedTime runTime = new ElapsedTime();
-
-    // This is the main method where runOpMode() runs all the code in TeleOp Mode
     @Override
     public void runOpMode() throws InterruptedException {
 
-        // Initialize the robot's hardware from HardwareMap amd allows you to run all this code within TeleOp
+        // Intialize the robot's hardware from HardwareMap amd allows you to run all this code within TeleOp
         robot.init(hardwareMap);
 
-        // Send telemetry data to the drivers and coach to identify that the robot is initialized and ready for the drivers to press the play button.
         telemetry.addData("Status", "Initialized");
         telemetry.addData("Hello Driver", "Press Play Button");
         telemetry.update();
 
+
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        // Runs until the condition of opModeIsActive is false (driver presses STOP). It only runs if the condition opModeIsActive is true.
+        // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            // Drive constants
-            double RIGHTPOW = -gamepad1.right_stick_y * 0.8;
-            double LEFTPOW = -gamepad1.left_stick_y * 0.8;
-            double REVERSE_THRES = -0.5;
-            double FORWARD_THRES = 0.5;
-            double drive_Speed = 0.6;
-            double turn_Speed = 0.4;
+            // Drive variables
+            double rightPower = -gamepad1.right_stick_y * 0.8;
+            double leftPower = -gamepad1.left_stick_y * 0.8;
+            double reverse_Thres = -0.3;
+            double forward_Thres = 0.3;
+            double drive_Speed = 0.7;
+            double turn_Speed = 0.5;
 
-            // Glyph Lift system
-            double LIFTPOW = -gamepad2.left_stick_y;
-            double UP_THRES = 0.5;
-            double DOWN_THRES = -0.5;
 
             // Send calculated power to wheels
             // Drive system
-            if(RIGHTPOW < FORWARD_THRES && RIGHTPOW > REVERSE_THRES && LEFTPOW < FORWARD_THRES && LEFTPOW > REVERSE_THRES){
+            if (rightPower < forward_Thres && rightPower > reverse_Thres && leftPower < forward_Thres && leftPower > reverse_Thres) {
                 DriveMethods.stopRightMotors();
                 DriveMethods.stopLeftMotors();
-            }else if(RIGHTPOW != 0.0 && LEFTPOW != 0.0) {
-                DriveMethods.driveRight(RIGHTPOW * drive_Speed);
-                DriveMethods.driveLeft(LEFTPOW * drive_Speed);
-            }else if(RIGHTPOW != 0.0 && LEFTPOW == 0.0){
-                DriveMethods.driveRight(RIGHTPOW * drive_Speed);
-            }else if(LEFTPOW != 0.0 && RIGHTPOW == 0.0) {
-                DriveMethods.driveLeft(LEFTPOW * drive_Speed);
-            }else if(RIGHTPOW < REVERSE_THRES && LEFTPOW > FORWARD_THRES){
-                DriveMethods.driveLeft(LEFTPOW * turn_Speed);
-                DriveMethods.driveRight(RIGHTPOW * turn_Speed);
-            }else if(RIGHTPOW > FORWARD_THRES && LEFTPOW < REVERSE_THRES){
-                DriveMethods.driveLeft(LEFTPOW * turn_Speed);
-                DriveMethods.driveRight(RIGHTPOW * turn_Speed);
+            } else if (rightPower != 0.0 && leftPower != 0.0) {
+                DriveMethods.driveRight(rightPower * drive_Speed);
+                DriveMethods.driveLeft(leftPower * drive_Speed);
+            } else if (rightPower != 0.0 && leftPower == 0.0) {
+                DriveMethods.driveRight(rightPower * drive_Speed);
+            } else if (leftPower != 0.0 && rightPower == 0.0) {
+                DriveMethods.driveLeft(leftPower * drive_Speed);
+            } else if (rightPower < reverse_Thres && leftPower > forward_Thres) {
+                DriveMethods.driveLeft(leftPower * turn_Speed);
+                DriveMethods.driveRight(rightPower * turn_Speed);
+            } else if (rightPower > forward_Thres && leftPower < reverse_Thres) {
+                DriveMethods.driveLeft(leftPower * turn_Speed);
+                DriveMethods.driveRight(rightPower * turn_Speed);
             }
 
-            // GlyphLift sub-system
-            // Lifting glyph
-            if(LIFTPOW < UP_THRES && LIFTPOW > DOWN_THRES) {
-                DriveMethods.glyphLift(0);
-
-            }else if(LIFTPOW > UP_THRES){
-                DriveMethods.glyphLift(-LIFTPOW * -0.5);
-
-            }else{
-                DriveMethods.glyphLift(LIFTPOW * 0.5);
-            }
-
-            // Grabbing glyph
-            if(gamepad2.b) {
-                DriveMethods.openGlyph();
-            }
-            if(gamepad2.a){
-                DriveMethods.closeGlyph();
-            }
-
-            // Show the elapsed game time and wheel power on the driver phones.
-            telemetry.addData("Status", "Run Time: " + runTime.toString());
-            telemetry.addData("Motors", "power (%.2f)");
-            telemetry.update();
         }
+
+
+
     }
 }
